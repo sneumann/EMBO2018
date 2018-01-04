@@ -17,17 +17,14 @@ RUN apt-get update \
 ##
 ## Add required R packages 
 ##
-ADD install.R /tmp/
-ADD installBioC.R /tmp/
+COPY install.R installBioC.R dot.rstudio.zip /tmp/
+
+# install packages and Fix big red startup warning:
 
 RUN R -f /tmp/install.R \
-  && rm -rf /tmp/downloaded_packages/ /tmp/*.rds
-
-RUN R -f /tmp/installBioC.R \
-  && rm -rf /tmp/downloaded_packages/ /tmp/*.rds
-
-## Fix big red startup warning:
-RUN echo 'options(repos = c(CRAN = "https://cran.rstudio.com"))' >/usr/local/lib/R/etc/Rprofile.site 
+  && R -f /tmp/installBioC.R \
+  && rm -rf /tmp/downloaded_packages/ /tmp/*.rds \
+  && echo 'options(repos = c(CRAN = "https://cran.rstudio.com"))' >/usr/local/lib/R/etc/Rprofile.site 
 
 ##
 ## Copy actual analysis
@@ -35,12 +32,10 @@ RUN echo 'options(repos = c(CRAN = "https://cran.rstudio.com"))' >/usr/local/lib
 
 # Set-up user folder: 
 USER rstudio
-ADD dot.rstudio.zip /tmp
 WORKDIR /home/rstudio
 RUN unzip /tmp/dot.rstudio.zip
-ADD MTBLS2.Rmd /home/rstudio/MTBLS2.Rmd
-ADD MTBLS2.Rmd /home/rstudio/MTBLS2.bib
-ADD MTBLS2.Rmd /home/rstudio/.rstudio/sources/s-A26AA33F/1919306-contents
+COPY MTBLS2.Rmd MTBLS2.bib /home/rstudio/
+COPY MTBLS2.Rmd /home/rstudio/.rstudio/sources/s-A26AA33F/1919306-contents
 
 # Switch back for normal rstudio operation 
 USER root
