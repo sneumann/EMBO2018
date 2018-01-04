@@ -2,7 +2,7 @@ FROM container-registry.phenomenal-h2020.eu/bioconductor/release_metabolomics2:l
 
 MAINTAINER Steffen Neumann <sneumann@ipb-halle.de>
 
-LABEL Description="EMBO2017 course image"
+LABEL Description="EMBO2018 course image"
 
 ##
 ## Taken from https://github.com/rocker-org/hadleyverse/blob/master/Dockerfile
