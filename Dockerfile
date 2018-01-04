@@ -10,7 +10,7 @@ LABEL Description="EMBO2017 course image"
 ##
 RUN apt-get update \
   && apt-get install -y --no-install-recommends  \
-  && apt-get install libxml2-dev \
+  && apt-get install -y libxml2-dev \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/
 
@@ -18,10 +18,11 @@ RUN apt-get update \
 ## Add required R packages 
 ##
 ADD install.R /tmp/
+ADD installBioC.R /tmp/
+
 RUN R -f /tmp/install.R \
   && rm -rf /tmp/downloaded_packages/ /tmp/*.rds
 
-ADD installBioC.R /tmp/
 RUN R -f /tmp/installBioC.R \
   && rm -rf /tmp/downloaded_packages/ /tmp/*.rds
 
